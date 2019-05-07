@@ -18,10 +18,15 @@ import java.util.stream.Collectors;
 public class TheHelloWorld {
     public static void main(String[] args) {
 
-        String a = "a:b:c:::";
-        Arrays.stream(a.split(":")).forEach(System.out::println);
+        String a = "adwqdq bdwqdcd  dqwdefgh ijkl dqwd         mwdqdwno p qrs tuvwx yz               ";
+        Arrays.stream(a.split(" ")).forEach(System.out::println);
+        System.out.println(a.split(" ").length);
         System.out.println("----------------------");
-        Arrays.stream(a.split(":", -1)).forEach(System.out::println);
+
+        //limit : 배열을 몇개까지 생성할지 체크
+        //-1은 공백도 포함해서 배열생성
+        Arrays.stream(a.split(" ", -1)).forEach(System.out::println);
+        System.out.println(a.split(" ", -1).length);
         System.out.println("----------------------");
 
 
