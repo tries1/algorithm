@@ -18,6 +18,13 @@ import java.util.stream.Collectors;
 public class TheHelloWorld {
     public static void main(String[] args) {
 
+        String a = "a:b:c:::";
+        Arrays.stream(a.split(":")).forEach(System.out::println);
+        System.out.println("----------------------");
+        Arrays.stream(a.split(":", -1)).forEach(System.out::println);
+        System.out.println("----------------------");
+
+
         //try hello world
         //TrY HeLlO WoRlD
         //System.out.println(solution("try hello world"));
