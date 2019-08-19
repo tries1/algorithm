@@ -1,21 +1,24 @@
 package bakjun;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class NumberSort3 {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int N = scanner.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
         int[] nums = new int[N];
 
         for (int i = 0; i < N; i++) {
-            nums[i] = scanner.nextInt();
+            nums[i] = Integer.parseInt(br.readLine());
         }
 
         sort(nums, 0, nums.length - 1);
 
-        Arrays.stream(nums).forEach(System.out::println);
+        StringBuilder sb = new StringBuilder();
+        Arrays.stream(nums).forEach(i -> sb.append(i + "\n"));
     }
 
     public static void sort(int[] arr, int left, int right) {
