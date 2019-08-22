@@ -1,9 +1,7 @@
 package programmers;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 문제 설명
@@ -27,14 +25,17 @@ import java.util.stream.Stream;
 public class MaxNumber {
     public static void main(String[] args) {
         int[] numbers = {3, 30, 34, 5, 9};
+        int[] numbers2 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
 
         //9534330
         System.out.println(solution(numbers));
 
+        System.out.println(solution(numbers2));
+
     }
 
     public static String solution(int[] numbers) {
-        return Arrays.stream(numbers)
+        String result = Arrays.stream(numbers)
                 .boxed()
                 .map(String::valueOf)
                 .sorted((o1, o2) -> {
@@ -42,5 +43,13 @@ public class MaxNumber {
                     return (o2 + o1).compareTo(o1 + o2);
                 })
                 .collect(Collectors.joining());
+
+        System.out.println("isZero" + isZero(result));
+
+        return isZero(result) ? "0" : result;
+    }
+
+    public static boolean isZero(String str) {
+        return (Arrays.stream(str.split("")).filter(s -> s.equals("0")).count() == str.length() ) ? true : false;
     }
 }
