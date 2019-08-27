@@ -1,7 +1,13 @@
 package programmers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 문제 설명
@@ -25,31 +31,37 @@ import java.util.stream.Collectors;
 public class MaxNumber {
     public static void main(String[] args) {
         int[] numbers = {3, 30, 34, 5, 9};
-        int[] numbers2 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
 
         //9534330
         System.out.println(solution(numbers));
 
-        System.out.println(solution(numbers2));
-
     }
 
     public static String solution(int[] numbers) {
-        String result = Arrays.stream(numbers)
-                .boxed()
-                .map(String::valueOf)
-                .sorted((o1, o2) -> {
-                    System.out.println(String.format("o2+o1 = %s, o1+o2 = %s", o2 + o1, o1 + o2));
-                    return (o2 + o1).compareTo(o1 + o2);
-                })
+        Map<Integer, List<Integer>> group = new HashMap<>();
+        Arrays.stream(numbers).forEach(i -> setGroup(group, intLength(i), i));
+
+        return group.entrySet().stream()
+                .sorted(Comparator.comparing(Map.Entry::getKey))
+                .map(Map.Entry::getValue)
+                .map(integers -> integers.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()))
+                .map(integers -> integers.stream().map(String::valueOf).collect(Collectors.joining()))
                 .collect(Collectors.joining());
-
-        System.out.println("isZero" + isZero(result));
-
-        return isZero(result) ? "0" : result;
     }
 
-    public static boolean isZero(String str) {
-        return (Arrays.stream(str.split("")).filter(s -> s.equals("0")).count() == str.length() ) ? true : false;
+    public static void setGroup(Map<Integer, List<Integer>> group, Integer groupNum, Integer value) {
+        if (group.containsKey(groupNum)) {
+            group.get(groupNum).add(value);
+        } else {
+            List<Integer> integers = new ArrayList<>();
+            integers.add(value);
+            group.put(groupNum, integers);
+        }
+    }
+
+    public static int intLength(int x) {
+        return (int) (Math.log10(x) + 1);
     }
 }
+
+
