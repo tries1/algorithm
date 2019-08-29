@@ -1,10 +1,8 @@
 package programmers;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.IntStream;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 문제 설명
@@ -46,56 +44,60 @@ import java.util.stream.IntStream;
  */
 public class Greedy {
     public static void main(String[] args) {
-        int n = 5;
-        int[] lost = {2, 4, 5};
-        int[] reserve = {1, 3, 5};
 
-        solution(n, lost, reserve);
+        int n = 5;
+        //int[] lost = {2, 3, 4};
+        //int[] reserve = {3, 4, 5};
+        //answer = 4
+
+        int[] lost = {2, 4};
+        int[] reserve = {3};
+        //answer = 4
+
+        System.out.println(solution(n, lost, reserve));
     }
 
     public static int solution(int n, int[] lost, int[] reserve) {
-        int answer = 0;
+        Set<Integer> doneReserve = new HashSet<>();
+        int count = 0;
 
-        int[] possibleReserve = Arrays.stream(reserve).filter(reserveNum -> {
-            boolean check = true;
-            for (int i = 0; i < lost.length; i++) {
-                if (lost[i] == reserveNum) {//여벌이 있지만 도둑맞았다면 제외
-                    check = false;
-                    break;
+        for (int i = 1; i <= n; i++) {
+            if (isContain(lost, i) && doneReserve.contains(i)) {//빌려도주고 도둑도 맞음
+                //count++;
+                continue;
+            } else if (!isContain(lost, i)){//도둑 안맞았으면
+                count++;
+                continue;
+            } else {//도둑 맞았으면
+                int lostNum = i;//학생 번호
+                int prevNum = lostNum - 1;
+                int nextNum = lostNum + 1;
+
+                if (isContain(reserve, lostNum) && !doneReserve.contains(lostNum)) {
+                    doneReserve.add(lostNum);
+                    count++;
+                    continue;
+                }
+
+                if (isContain(reserve, prevNum) && !doneReserve.contains(prevNum)) {
+                    doneReserve.add(prevNum);
+                    count++;
+                    continue;
+                }
+
+                if (isContain(reserve, nextNum) && !doneReserve.contains(nextNum)) {
+                    doneReserve.add(nextNum);
+                    count++;
+                    continue;
                 }
             }
 
-            return check;
-        })
-                .sorted()
-                .boxed()
-                .mapToInt(Integer::intValue)
-                .toArray();
-
-        Arrays.stream(possibleReserve).forEach(System.out::println);
-
-
-        AtomicInteger count = new AtomicInteger(0);
-
-        //IntStream.rangeClosed(1, n)
-
-
-        return answer;
-    }
-
-    public static boolean check(int idx, int[] lost, int[] reserve) {
-
-
-        if (idx > 0) {
-            //return reserve[idx - 1]
-            return false;
-
-        } else {
-
-            return false;
         }
 
+        return count;
+    }
 
-        //return reserve[idx]
+    public static boolean isContain(int[] arr, int num) {
+        return Arrays.stream(arr).filter(value -> value == num).findAny().isPresent();
     }
 }
