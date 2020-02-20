@@ -2,7 +2,10 @@ package programmers;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * 트럭 여러 대가 강을 가로지르는 일 차선 다리를 정해진 순으로 건너려 합니다.
@@ -39,8 +42,50 @@ import java.util.Queue;
 
 public class Truck {
 
-    static int nowBridgeWeight = 0;
-    static int bridgeLength, bridgeWeight, passingCount = 0;
+    public static void main(String[] args) {
+
+        int[] truck_weights = {7,4,5,6};
+        System.out.println(solution(2, 10, truck_weights));
+    }
+
+    public static int solution(int bridge_length, int weight, int[] truck_weights) {
+        int answer = 0;
+        Queue<Integer> bridge = new LinkedList<>();
+        Queue<Integer> trucks = new LinkedList<>();
+        Arrays.stream(truck_weights).boxed().forEach(trucks::offer);
+        IntStream.rangeClosed(1, bridge_length).forEach(value -> bridge.offer(0));
+        int currentBridgeWeight = 0, truckWeight = trucks.poll();
+
+        while (!trucks.isEmpty() && !bridge.isEmpty()){
+
+            int outTruck = bridge.poll();
+            if(outTruck != 0){
+                currentBridgeWeight -= truckWeight;
+                truckWeight = trucks.poll();
+
+                if(bridge.size() == 0){
+                   IntStream.rangeClosed(1, bridge_length - 1).forEach(value -> bridge.offer(0));
+                }
+            }
+
+            if((truckWeight + currentBridgeWeight) <= weight){
+                currentBridgeWeight += truckWeight;
+
+                bridge.offer(truckWeight);
+
+                /*if(bridge.size() < bridge_length){
+                    IntStream.rangeClosed(1, bridge_length - bridge.size()).forEach(value -> bridge.offer(0));
+                }*/
+            }
+
+            answer++;
+        }
+
+        return answer;
+    }
+
+    /*static int nowBridgeWeight = 0;
+    static int bridgeLength, bridgeWeight, passingCount = 0, waitingCount = 0;
     static Queue<Integer> waitingTruck = new LinkedList<>();
     static Queue<Integer> passingTruck = new LinkedList<>();
     static Queue<Integer> passedTruck = new LinkedList<>();
@@ -61,12 +106,14 @@ public class Truck {
         bridgeLength = bridge_length;
 
         // add waiting
-        Arrays.stream(truck_weights).forEach(waitingTruck::offer);
+        Arrays.stream(truck_weights).forEach(value -> {
+            waitingCount++;
+            waitingTruck.offer(value);
+        });
 
-        // 1초에 1만큼씩 이동할수있으며
+        // 1초에 1만큼씩 이동할수있으며 - while문으로 시간을 1씩 증가하고, passing트럭과 대기중이 트럭이 없는지확인
         // 순서대로 지나야하면, 이떄 weight를 체크해서 다음 트럭이 이동할수 있는지 확인필요
 
-        truck_weights
         while (bridgeLength > passingCount) {
             if(bridgeLength > passingCount){
                 Integer truck = waitingTruck.poll();
@@ -106,7 +153,7 @@ public class Truck {
 
     public static boolean isFullBridge(int nextTruckWeight) {
         return (nowBridgeWeight + nextTruckWeight) < bridgeWeight;
-    }
+    }*/
 }
 
 
