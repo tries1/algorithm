@@ -50,13 +50,11 @@ public class NumberBaseball {
 
     //완전탐색이니깐, 1 ~ 999까지 반복하면서 위조건에 동일한 갯수를 구해보자
     public static int solution(int[][] baseball) {
-        int answer = 0;
-
         String answerNum;
         Stack<String> cadinate = new Stack<>();
         for (int i = 1; i <= 999; i++) {
             answerNum = String.valueOf(i);
-            if ((answerNum.length() == 1 || answerNum.length() == 2) || Arrays.stream(answerNum.split("")).distinct().count() != 3) {
+            if (Arrays.stream(answerNum.split("")).filter(s -> !"0".equalsIgnoreCase(s)).distinct().count() != 3) {
                 continue;
             }
 
@@ -66,19 +64,19 @@ public class NumberBaseball {
                 int strikeCount = ints[1];
                 int ballCount = ints[2];
 
-                if(check(answerNumbers, numbers, strikeCount, ballCount)){
+                if (check(answerNumbers, numbers, strikeCount, ballCount)) {
                     cadinate.push(answerNum);
                 }
             }
 
         }
 
-
         return cadinate.size();
     }
 
     public static boolean check(int[] answerNum, int[] guessNum, int strike, int ball) {
         int tmpStrike = 0, tmpBall = 0;
+        boolean checkResult = false;
 
         for (int i = 0; i < 3; i++) {
             //strike check
@@ -88,12 +86,18 @@ public class NumberBaseball {
             }
 
             for (int j = i; j < guessNum.length; j++) {
-                if (answerNum[j] == guessNum[j]) {
+                if (answerNum[i] == guessNum[j]) {
                     tmpBall++;
                 }
             }
+
+            if (strike == tmpStrike && ball == (tmpBall)) {
+                continue;
+            } else {
+                return false;
+            }
         }
 
-        return strike == tmpStrike && ball == (tmpStrike - tmpBall);
+        return true;
     }
 }
