@@ -2,6 +2,10 @@ package hackerrank;
 
 import java.util.Scanner;
 
+/**
+ * ar의 갯수만큼 반복하면서, 각각 앞에서부터 순차대로 숫자를 제외해가며 sum을 하고
+ * min, max를 구하여 반영한다.
+ */
 public class MiniMaxSum {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
