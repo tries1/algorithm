@@ -1,9 +1,6 @@
 package programmers;
 
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Queue;
-import java.util.stream.Collectors;
 
 /**
  * 문제 설명
@@ -43,26 +40,59 @@ public class Print {
 
         int[] answer = {2, 1, 3, 2};
         int location = 2;
-        //int[] answer = {1, 1, 9, 1, 1, 1};
-        //int location = 0;
+        //1
         System.out.println(solution(answer, location));
 
+        int[] answer2 = {1, 1, 9, 1, 1, 1};
+        int location2 = 0;
+        //5
+        System.out.println(solution(answer2, location2));
+
+        int[] answer3 = {2, 3, 4, 5, 1};
+        int location3 = 4;
+        //5
+        System.out.println(solution(answer3, location3));
     }
 
     public static int solution(int[] priorities, int location) {
-        int answer = 0;
-        int currentPriorty = 0;
-
+        int answer = 1;
+        LinkedList<Document> documentQueue = new LinkedList<>();
         for (int i = 0; i < priorities.length; i++) {
-            currentPriorty = priorities[i];
+            documentQueue.offer(new Document(priorities[i], i));
+        }
 
-            for (int j = i + 1; j < priorities.length; j++) {
-                if (currentPriorty < priorities[j]) {
+        Document currentPriority;
+        while (!documentQueue.isEmpty()){
+            currentPriority = documentQueue.poll();
+
+            for (int i = 0; i < documentQueue.size(); i++) {
+                if (currentPriority.priority < documentQueue.get(i).priority){
+                    //System.out.println(currentPriority.priority + " 다시 추가");
+                    documentQueue.offer(currentPriority);
+                    break;
+                }
+
+                //출력시, 내문서인지 아니라면 반복
+                if (i == documentQueue.size()-1){
+                    if(currentPriority.location == location){
+                        return answer;
+                    }
+
                     answer++;
                 }
             }
         }
 
         return answer;
+    }
+
+    public static class Document {
+        public int priority;
+        public int location;
+
+        public Document(int priority, int location){
+            this.priority = priority;
+            this.location = location;
+        }
     }
 }

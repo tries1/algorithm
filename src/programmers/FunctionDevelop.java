@@ -1,6 +1,8 @@
 package programmers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -28,38 +30,67 @@ import java.util.List;
  */
 public class FunctionDevelop {
     public static void main(String[] args) {
-        int[] progress = {93, 30, 55};
-        int[] speeds = {1, 30, 5};
-        System.out.println(solution(progress, speeds)[0] + ", " + solution(progress, speeds)[1]);
+        //int[] progress = {93, 30, 55};
+        //int[] speeds = {1, 30, 5};
+
+        int[] progress = {90, 93, 93, 93, 93, 30, 30, 10};
+        int[] speeds = {10, 1, 1, 1, 1, 1, 30, 5};
+        //2, 1
+        Arrays.stream(solution(progress, speeds)).forEach(value -> System.out.print(value + " "));
     }
 
     public static int[] solution(int[] progresses, int[] speeds) {
-        int[] answer = {};
+        LinkedList<FunctionProgress> func = new LinkedList<>();
+        List<Integer> result = new ArrayList<>();
+        List<Integer> deleted = new ArrayList<>();
 
-        List<Integer> releaseSum = new ArrayList<>();
-        int releaseCount = 0;
-        int preReleaseDate = 0;
-        int releaseDate = 0;
-        int proc = 0;
         for (int i = 0; i < progresses.length; i++) {
-            proc = progresses[i];
+            func.offer(new FunctionProgress(i, progresses[i], speeds[i]));
+        }
 
-            while (proc <= 100) {
-                releaseDate++;
-                proc += speeds[i];
+        int releaseCnt;
+        while (!func.isEmpty()) {
+            releaseCnt = 0;
+
+            //반복하면서 기능을 speed만큼 더하고
+            func.forEach(fp -> fp.progress = fp.progress + fp.speed);
+
+            //100%인 작업이 있으면 배포
+            for (int i = 0; i < func.size(); i++) {
+                if (func.get(i).progress >= 100) {
+                    releaseCnt++;
+                    deleted.add(func.get(i).idx);
+                } else {
+                    break;
+                }
             }
 
-            preReleaseDate = releaseDate;
-            releaseCount++;
-            if (releaseCount <= releaseCount) {
-                releaseCount++;
-            } else {
-                releaseSum.add(releaseCount);
+            if (releaseCnt > 0) {
+                deleted.forEach(idx -> {
+                    for (int i = 0; i < func.size(); i++) {
+                        if(idx.equals(func.get(i).idx)){
+                            func.poll();
+                        }
+                    }
+                });
+                result.add(releaseCnt);
             }
         }
 
-        releaseSum.stream().forEach(System.out::println);
+        //배포시 몇개가 배포되었는지 카운트후 result
+        return result.stream().mapToInt(Integer::intValue).toArray();
+    }
 
-        return answer;
+    public static class FunctionProgress {
+        public int idx;
+        public int progress;
+        public int speed;
+
+        public FunctionProgress(int idx, int progress, int speed) {
+            this.idx = idx;
+            this.progress = progress;
+            this.speed = speed;
+
+        }
     }
 }
