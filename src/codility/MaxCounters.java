@@ -1,7 +1,5 @@
 package codility;
 
-import java.util.Arrays;
-
 public class MaxCounters {
     public static void main(String[] args) {
 
