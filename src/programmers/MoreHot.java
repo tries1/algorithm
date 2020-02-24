@@ -1,8 +1,6 @@
 package programmers;
 
-import java.util.LinkedList;
 import java.util.PriorityQueue;
-import java.util.Queue;
 
 /**
  * 문제 설명
@@ -41,39 +39,20 @@ public class MoreHot {
     public static int solution(int[] scoville, int K) {
         int answer = 0;
 
-        Queue<Food> fq = new LinkedList<>();
+        PriorityQueue<Integer> foodPQ = new PriorityQueue<>();
         for (int i = 0; i < scoville.length; i++) {
-            fq.offer(new Food(scoville[i]));
+            foodPQ.offer(scoville[i]);
         }
-        PriorityQueue<Food> foodPQ = new PriorityQueue<>(fq);
 
-        long littleHot = -1;
-        while (littleHot != 0 && foodPQ.size() != 1) {
-            littleHot = foodPQ.stream().filter(food -> food.scoville < K).count();
-
-            while (littleHot != 0 && foodPQ.size() != 1) {
-                if (foodPQ.peek().scoville < K) {
-                    foodPQ.offer(new Food(foodPQ.poll().scoville + (foodPQ.poll().scoville * 2)));
-                    answer++;
-                    break;
-                }
+        while (foodPQ.peek() < K) {
+            if (foodPQ.size() == 1) {
+                return -1;
             }
+
+            foodPQ.offer(foodPQ.poll() + (foodPQ.poll() * 2));
+            answer++;
         }
 
-        return (foodPQ.size() == 1 && foodPQ.peek().scoville < K) ? -1 : answer;
-    }
-
-
-    public static class Food implements Comparable<Food> {
-        public int scoville;
-
-        public Food(int scoville) {
-            this.scoville = scoville;
-        }
-
-        @Override
-        public int compareTo(Food o) {
-            return this.scoville > o.scoville ? 1 : -1;
-        }
+        return answer;
     }
 }

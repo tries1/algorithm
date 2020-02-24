@@ -1,6 +1,8 @@
 package programmers;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * 문제 설명
@@ -28,40 +30,25 @@ public class Hindex {
         //h는 기준이 되는값
         //기준이되는 h를 구하기위한 방법이 관건
         //h = h < 이상 인용된 논문 && h > 이상 인용된 논문
-        //int[] citations = {3, 0, 6, 1, 5};
-        int[] citations = {4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6};//6
+
+        //3
+        int[] citations = {3, 0, 6, 1, 5};
+        //int[] citations = {4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6};//5
         System.out.println(solution(citations));
     }
 
     public static int solution(int[] citations) {
-        int high = 0;
-        int low = 0;
         int answer = 0;
+        Integer arr[] = Arrays.stream(citations).boxed().toArray(Integer[]::new);
 
-
-
-        for (int i = 0; i < citations.length; i++) {
-            for (int j = 0; j < citations.length; j++) {
-                if (citations[i] <= citations[j] && citations[i] >= citations[j]) {
-                    high++;
-                    low++;
-                }else if (citations[i] <= citations[j]) {
-                    high++;
-                } else {
-                    low++;
-                }
-            }
-
-
-            System.out.println(i + " 번째 :  " + high + " | " + low);
-            if (high == low) {
-                answer = citations[i];
+        while (answer < citations.length){
+            if(arr[answer] <= answer){
                 break;
             }
 
-            high = 0;
-            low = 0;
+            answer++;
         }
+
         return answer;
     }
 
