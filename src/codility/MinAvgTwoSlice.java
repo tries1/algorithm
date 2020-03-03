@@ -31,19 +31,35 @@ public class MinAvgTwoSlice {
 
         //(1, 2)
         (2 + 2) / 2-1 + 1
+
+        0 ≤ P < Q < N, is called a slice of array A
      */
 
     //주어진 배열 A를 구간별로 잘랐을때 가장작은 최소값을 구하는 문제
     public static int solution(int[] A) {
-        int min = Integer.MAX_VALUE;
-        int sum = 0;
+        double min = A.length;
+        int minIdx = 0;
+        int PSum;
+        double tmp = 0.0;
+
         for (int i = 0; i < A.length; i++) {
-            sum = 0;
-            for (int j = 1; j < A.length; j++) {
-                sum += A[j];
+            PSum = 0;
+            for (int j = i; j < A.length; j++) {
+                PSum += A[j];
+
+                tmp = (((double) PSum / ((j - i) + 1)) * 100 ) / 100.0;
+                //System.out.println(i + ", " + j + " : " + PSum + " / " + ((j - i) + 1) + " = " + tmp);
+
             }
+
+            if (min > tmp && minIdx > i){
+                min = tmp;
+                minIdx = i;
+                System.out.println(min);
+            }
+
         }
 
-        return 0;
+        return minIdx;
     }
 }
