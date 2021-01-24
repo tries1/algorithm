@@ -28,3 +28,6 @@ hs_err_pid*
 algorithm.iml
 
 /out
+/src/testreal/
+!/src/testreal/Test2.java
+!/src/testreal/Test2.java
